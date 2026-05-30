@@ -1,16 +1,22 @@
-.PHONY: help install install-dev run test lint format clean docker-build docker-run
+.PHONY: help install install-dev run test lint format clean docker-build docker-run deploy-railway deploy-aws sam-build sam-deploy
 
 help:
 	@echo "Comandos disponibles:"
-	@echo "  make install      - Instalar dependencias de producción"
-	@echo "  make install-dev  - Instalar dependencias de desarrollo"
-	@echo "  make run          - Ejecutar servidor de desarrollo"
-	@echo "  make test         - Ejecutar tests"
-	@echo "  make lint         - Ejecutar linter"
-	@echo "  make format       - Formatear código"
-	@echo "  make clean        - Limpiar archivos temporales"
-	@echo "  make docker-build - Construir imagen Docker"
-	@echo "  make docker-run   - Ejecutar con Docker Compose"
+	@echo "  make install       - Instalar dependencias de producción"
+	@echo "  make install-dev   - Instalar dependencias de desarrollo"
+	@echo "  make run           - Ejecutar servidor de desarrollo"
+	@echo "  make test          - Ejecutar tests"
+	@echo "  make lint          - Ejecutar linter"
+	@echo "  make format        - Formatear código"
+	@echo "  make clean         - Limpiar archivos temporales"
+	@echo "  make docker-build  - Construir imagen Docker"
+	@echo "  make docker-run    - Ejecutar con Docker Compose"
+	@echo ""
+	@echo "Deployment:"
+	@echo "  make deploy-railway - Desplegar a Railway"
+	@echo "  make deploy-aws     - Desplegar a AWS Lambda"
+	@echo "  make sam-build      - Build con AWS SAM"
+	@echo "  make sam-deploy     - Deploy con AWS SAM"
 
 install:
 	pip install -r requirements.txt
@@ -52,3 +58,20 @@ docker-run:
 
 docker-stop:
 	docker-compose down
+
+# Deployment commands
+deploy-railway:
+	@echo "🚀 Desplegando a Railway..."
+	./deploy/deploy_railway.sh
+
+deploy-aws:
+	@echo "🚀 Desplegando a AWS Lambda..."
+	./deploy/deploy_aws.sh
+
+sam-build:
+	@echo "📦 Building con AWS SAM..."
+	sam build --use-container
+
+sam-deploy:
+	@echo "🚀 Deploying con AWS SAM..."
+	sam deploy

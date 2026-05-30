@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CV Analyzer API - Serverless Application
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.11
+    Environment:
+      Variables:
+        AWS_REGION: !Ref AWS::Region
+        MAX_FILE_SIZE_MB: 5
+        ALLOWED_EXTENSIONS: pdf,txt
+        DEFAULT_LANGUAGE: es
+
+Resources:
+  CVAnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: cv-analyzer-api
+      CodeUri: .
+      Handler: lambda_handler.handler
+      Description: API para analizar CVs con AWS Bedrock
+      Architectures:
+        - x86_64
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Action:
+              - bedrock:InvokeModel
+            Resource: 
+              - !Sub 'arn:aws:bedrock:${AWS::Region}::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0'
+      Events:
+        RootPath:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+        AnalyzeCV:
+          Type: Api
+          Properties:
+            Path: /analyze
+            Method: POST
+        ProxyPath:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  CVAnalyzerApi:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  CVAnalyzerFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt CVAnalyzerFunction.Arn
+  CVAnalyzerFunctionIamRole:
+    Description: "IAM Role for Lambda Function"
+    Value: !GetAtt CVAnalyzerFunctionRole.Arn

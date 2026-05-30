@@ -18,14 +18,41 @@ Stack: Python + Kiro + AWS
 | main | README, visión general |
 | 1-kiro-setup | Specs, Skills y Agents |
 | 2-project-structure | ✅ Estructura completa del proyecto Python |
-| 3-deploy | Deploy Railway / AWS |
+| 3-deploy | ✅ Configuración de deployment (AWS Lambda + Railway) |
 
 ## Empieza aquí
 
 ```bash
 git clone https://github.com/carlicode/cv-analyzer-kiro.git
 cd cv-analyzer-kiro
-git checkout 1-kiro-setup
+
+# Para desarrollo local
+git checkout 2-project-structure
+
+# Para deployment
+git checkout 3-deploy
 ```
+
+## 🚀 Deploy Rápido
+
+### Railway (Más Fácil)
+
+```bash
+npm install -g @railway/cli
+railway login
+railway init
+railway up
+```
+
+### AWS Lambda (Recomendado)
+
+```bash
+brew install aws-sam-cli
+aws configure
+sam build --use-container
+sam deploy --guided
+```
+
+Ver [DEPLOY_QUICK.md](DEPLOY_QUICK.md) para guía rápida o [DEPLOYMENT.md](DEPLOYMENT.md) para guía completa.
 
 > "Esto es un MVP. Esto es suficiente para empezar."

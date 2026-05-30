@@ -6,3 +6,23 @@ venv/
 .DS_Store
 .idea/
 .vscode/
+
+# AWS SAM
+.aws-sam/
+samconfig.toml.bak
+
+# Railway
+.railway/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
