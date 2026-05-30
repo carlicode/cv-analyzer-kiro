@@ -1,0 +1,168 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                         RAMA: 3-deploy ✅                                    ║
+║                                                                              ║
+║                  Configuración Completa de Deployment                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+�� ESTADÍSTICAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  📁 Archivos agregados:     18
+  📜 Scripts de deploy:      2
+  📖 Documentación:          4 guías
+  🔄 CI/CD workflows:        2
+  🎯 Opciones de deploy:     2 (AWS Lambda + Railway)
+  ⏱️  Tiempo de setup:        5-10 minutos
+
+🎯 OPCIONES DE DEPLOYMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1️⃣  AWS Lambda (Recomendado para Producción)
+     ✅ Acceso directo a Bedrock con IAM roles
+     ✅ Escalado automático
+     ✅ Pay-per-use (~$10/mes para 1000 análisis)
+     ✅ Alta disponibilidad
+     
+     Comando: make sam-build && make sam-deploy
+
+  2️⃣  Railway (Ideal para Demos)
+     ✅ Setup en 5 minutos
+     ✅ CI/CD automático desde GitHub
+     ✅ Logs en tiempo real
+     ✅ Perfecto para MVPs
+     
+     Comando: make deploy-railway
+
+📦 ARCHIVOS DE CONFIGURACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  🔧 AWS Lambda:
+     ✅ lambda_handler.py          - Handler Mangum para FastAPI
+     ✅ template.yaml              - SAM template (infraestructura)
+     ✅ samconfig.toml             - Configuración SAM
+     ✅ requirements-lambda.txt    - Dependencias optimizadas
+
+  🚂 Railway:
+     ✅ railway.json               - Configuración Railway
+     ✅ railway.toml               - Configuración alternativa
+     ✅ Procfile                   - Comando de inicio
+
+  📜 Scripts:
+     ✅ deploy/deploy_aws.sh       - Script automatizado AWS
+     ✅ deploy/deploy_railway.sh   - Script automatizado Railway
+
+  📖 Documentación:
+     ✅ DEPLOYMENT.md              - Guía completa
+     ✅ DEPLOY_QUICK.md            - Guía rápida (10 min)
+     ✅ DEPLOY_INFO.md             - Info técnica detallada
+     ✅ DEPLOY_SUMMARY.md          - Resumen de la rama
+
+  🔄 CI/CD:
+     ✅ .github/workflows/test.yml        - Tests automáticos
+     ✅ .github/workflows/deploy-aws.yml  - Deploy automático
+
+🚀 QUICK START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  AWS Lambda:
+  ──────────
+  1. brew install aws-sam-cli
+  2. aws configure
+  3. sam build --use-container
+  4. sam deploy --guided
+
+  Railway:
+  ────────
+  1. npm install -g @railway/cli
+  2. railway login
+  3. railway init
+  4. railway up
+  5. railway variables set AWS_REGION=us-east-1
+  6. railway variables set AWS_ACCESS_KEY_ID=tu_key
+  7. railway variables set AWS_SECRET_ACCESS_KEY=tu_secret
+
+✅ VERIFICACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  # Health check
+  curl https://tu-api-url/
+
+  # Probar análisis
+  python scripts/test_endpoint.py tu_cv.pdf https://tu-api-url
+
+  # Swagger UI
+  open https://tu-api-url/docs
+
+🔧 COMANDOS MAKE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  make deploy-railway    # Deploy a Railway
+  make deploy-aws        # Deploy a AWS Lambda
+  make sam-build         # Build con SAM
+  make sam-deploy        # Deploy con SAM
+
+💰 COSTOS ESTIMADOS (1000 análisis/mes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  AWS Lambda:
+  ──────────
+  - Lambda:        $0.20
+  - API Gateway:   $3.50
+  - Bedrock:       $5-10
+  ─────────────────────
+  Total:          ~$10/mes
+
+  Railway:
+  ────────
+  - Plan:          $5-20/mes
+  - Bedrock:       $5-10
+  ─────────────────────
+  Total:          ~$15-30/mes
+
+📊 COMPARACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Característica    │ AWS Lambda      │ Railway
+  ──────────────────┼─────────────────┼──────────────
+  Setup             │ ⭐⭐⭐          │ ⭐⭐⭐⭐⭐
+  Costo             │ Pay-per-use     │ Fijo mensual
+  Escalado          │ Automático      │ Manual
+  Bedrock           │ Directo (IAM)   │ Credentials
+  CI/CD             │ Manual/Actions  │ Automático
+  Ideal para        │ Producción      │ Demos/MVPs
+
+🎯 RECOMENDACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Para este demo:        → Railway (setup rápido, ideal para presentación)
+  Para producción real:  → AWS Lambda (mejor integración, más escalable)
+
+📚 DOCUMENTACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  DEPLOYMENT.md      - Guía completa con troubleshooting
+  DEPLOY_QUICK.md    - Guía rápida para empezar en 10 minutos
+  DEPLOY_INFO.md     - Información técnica detallada
+  DEPLOY_SUMMARY.md  - Resumen de esta rama
+
+✨ RESULTADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ Configuración completa para AWS Lambda
+  ✅ Configuración completa para Railway
+  ✅ Scripts de deployment automatizados
+  ✅ CI/CD con GitHub Actions
+  ✅ Documentación exhaustiva
+  ✅ Comandos Make para facilitar el deploy
+
+  🎉 ¡Tu API está lista para producción!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Creado por: @Carli.Code
+Demo: GDG Santa Cruz · Women Techmakers · UCB Bolivia
+Charla: "Zero to Hero: MVPs Hyper-Fast con Kiro y Python"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
