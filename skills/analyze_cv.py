@@ -82,7 +82,7 @@ def analyze_with_bedrock(cv_text: str, language: str = "es") -> Dict:
     """
     bedrock = boto3.client(
         service_name='bedrock-runtime',
-        region_name=os.getenv('AWS_REGION', 'us-east-1')
+        region_name=os.getenv('AWS_DEFAULT_REGION', 'us-east-1')
     )
     
     prompt = f"""Analiza este CV y devuelve feedback estructurado en {language}.

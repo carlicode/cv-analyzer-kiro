@@ -9,7 +9,6 @@ Globals:
     Runtime: python3.11
     Environment:
       Variables:
-        AWS_REGION: !Ref AWS::Region
         MAX_FILE_SIZE_MB: 5
         ALLOWED_EXTENSIONS: pdf,txt
         DEFAULT_LANGUAGE: es
