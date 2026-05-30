@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  cv-analyzer:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-5}
+      - ALLOWED_EXTENSIONS=${ALLOWED_EXTENSIONS:-pdf,txt}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-es}
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload

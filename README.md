@@ -17,7 +17,7 @@ Stack: Python + Kiro + AWS
 |------|----------|
 | main | README, visión general |
 | 1-kiro-setup | Specs, Skills y Agents |
-| 2-python-ia | Código Python + IA |
+| 2-project-structure | ✅ Estructura completa del proyecto Python |
 | 3-deploy | Deploy Railway / AWS |
 
 ## Empieza aquí
