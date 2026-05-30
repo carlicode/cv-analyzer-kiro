@@ -1,0 +1,219 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                         RAMA: 4-deploy-discussion ✅                         ║
+║                                                                              ║
+║                  Preparación Final para Deploy a AWS                        ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+🎯 OBJETIVO DE ESTA RAMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Actualizar el proyecto para usar Claude Sonnet 4.6 (el modelo más reciente)
+  y preparar todo para un deploy exitoso a AWS Lambda.
+
+🔄 CAMBIOS REALIZADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Actualización de Modelo de IA
+     ────────────────────────────────
+     ❌ Claude 3.5 Sonnet (no disponible en tu región)
+     ✅ Claude Sonnet 4.6 (más reciente, más potente, ACTIVE)
+
+     Archivos modificados:
+     • config.py - BEDROCK_MODEL_ID actualizado
+     • skills/analyze_cv.py - modelId actualizado
+     • template.yaml - Permisos IAM actualizados
+
+  2. Instalación de Herramientas
+     ────────────────────────────
+     ✅ AWS SAM CLI v1.161.0 instalado
+     ✅ AWS CLI configurado (cuenta: 447924811196)
+     ✅ Docker instalado (necesita iniciarse)
+
+  3. Nuevos Scripts y Documentación
+     ────────────────────────────────
+     ✅ deploy/deploy_aws_auto.sh - Script automatizado completo
+     ✅ BRANCH_4_DEPLOY_STEPS.md - Guía paso a paso detallada
+
+📦 ARCHIVOS NUEVOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ deploy/deploy_aws_auto.sh      - Script de deploy automatizado
+  ✅ BRANCH_4_DEPLOY_STEPS.md       - Guía completa de deploy
+  ✅ BRANCH_4_INFO.txt              - Este archivo
+
+📝 ARCHIVOS MODIFICADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✏️  config.py                     - Modelo actualizado a Claude Sonnet 4.6
+  ✏️  skills/analyze_cv.py          - Modelo actualizado a Claude Sonnet 4.6
+  ✏️  template.yaml                 - Permisos IAM para Claude 4.x
+
+🚀 CÓMO DEPLOYAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Opción 1: Script Automatizado (Recomendado)
+  ────────────────────────────────────────────
+  
+  1. Inicia Docker Desktop
+  2. Ejecuta:
+     
+     ./deploy/deploy_aws_auto.sh
+
+  El script hace TODO automáticamente:
+  ✅ Verifica herramientas
+  ✅ Verifica acceso a Bedrock
+  ✅ Build con SAM
+  ✅ Deploy a AWS
+  ✅ Verifica que funcione
+  ✅ Te da la URL de tu API
+
+  Opción 2: Manual (Paso a Paso)
+  ───────────────────────────────
+  
+  1. Inicia Docker Desktop
+  2. Build:
+     sam build --use-container
+  
+  3. Deploy:
+     sam deploy --guided
+  
+  4. Verifica:
+     curl https://tu-api-url/
+
+  Ver guía completa en: BRANCH_4_DEPLOY_STEPS.md
+
+🤖 MODELO DE IA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Modelo: Claude Sonnet 4.6
+  Provider: Anthropic (via AWS Bedrock)
+  Model ID: anthropic.claude-sonnet-4-6
+  Status: ACTIVE
+  
+  Ventajas sobre Claude 3.5 Sonnet:
+  ✅ Más reciente (2026)
+  ✅ Mejor comprensión de contexto
+  ✅ Respuestas más precisas
+  ✅ Mejor manejo de JSON estructurado
+
+⚙️ CONFIGURACIÓN AWS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Región: us-east-1
+  Cuenta: 447924811196
+  Stack: cv-analyzer-stack
+  Función: cv-analyzer-api
+  
+  Permisos IAM:
+  • bedrock:InvokeModel (Claude Sonnet 4.6)
+  • bedrock:InvokeModel (todos los modelos Claude)
+
+📊 VERIFICACIÓN PRE-DEPLOY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ AWS CLI instalado
+  ✅ SAM CLI instalado
+  ✅ Docker instalado
+  ✅ AWS CLI configurado
+  ✅ Acceso a Bedrock confirmado
+  ✅ Claude Sonnet 4.6 disponible
+  ⏳ Docker necesita iniciarse
+
+🔍 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Error: "Docker not running"
+  ───────────────────────────
+  Solución: Inicia Docker Desktop
+  
+  open -a Docker
+  # Espera 30 segundos
+  docker ps
+
+  Error: "Model access denied"
+  ────────────────────────────
+  Solución: Habilita Claude Sonnet 4.6 en Bedrock
+  
+  1. https://console.aws.amazon.com/bedrock/
+  2. Model access → Manage model access
+  3. Busca "Claude Sonnet 4.6"
+  4. Marca checkbox → Save changes
+  5. Espera 2-3 minutos
+
+  Error: "Stack already exists"
+  ─────────────────────────────
+  Solución: Actualiza el stack existente
+  
+  sam deploy  # Sin --guided
+
+💰 COSTOS ESTIMADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Para 1000 análisis de CV al mes:
+  
+  • Lambda:              $0.20
+  • API Gateway:         $3.50
+  • Bedrock (Claude 4.6): $8-12
+  ─────────────────────────────
+  Total:                ~$12-16/mes
+
+  Free Tier AWS (primer año):
+  • Lambda: 1M requests gratis/mes
+  • API Gateway: 1M requests gratis/mes
+
+📚 DOCUMENTACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  BRANCH_4_DEPLOY_STEPS.md  - Guía completa paso a paso
+  DEPLOYMENT.md             - Guía general (rama 3)
+  DEPLOY_QUICK.md           - Guía rápida (rama 3)
+  deploy_aws_auto.sh        - Script automatizado
+
+🎯 PRÓXIMOS PASOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. ⏳ Inicia Docker Desktop
+  2. 🚀 Ejecuta: ./deploy/deploy_aws_auto.sh
+  3. ✅ Verifica que funcione
+  4. 📝 Guarda la URL de tu API
+  5. 🎉 ¡Listo para tu presentación!
+
+✨ RESULTADO FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Después del deploy tendrás:
+  
+  ✅ API REST en producción (AWS Lambda)
+  ✅ URL pública accesible
+  ✅ Escalado automático
+  ✅ Claude Sonnet 4.6 integrado
+  ✅ Logs en CloudWatch
+  ✅ Métricas en tiempo real
+  ✅ Pay-per-use (~$12-16/mes)
+
+🔗 ENLACES ÚTILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  AWS Lambda Console:
+  https://console.aws.amazon.com/lambda/home?region=us-east-1
+
+  AWS Bedrock Console:
+  https://console.aws.amazon.com/bedrock/
+
+  CloudWatch Logs:
+  https://console.aws.amazon.com/cloudwatch/
+
+  AWS SAM Docs:
+  https://docs.aws.amazon.com/serverless-application-model/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Creado por: @Carli.Code
+Demo: GDG Santa Cruz · Women Techmakers · UCB Bolivia
+Charla: "Zero to Hero: MVPs Hyper-Fast con Kiro y Python"
+Modelo: Claude Sonnet 4.6 (AWS Bedrock)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

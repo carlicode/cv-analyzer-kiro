@@ -23,7 +23,7 @@ class Config:
     PORT = int(os.getenv("PORT", "8000"))
     
     # Bedrock Model
-    BEDROCK_MODEL_ID = "anthropic.claude-3-5-sonnet-20241022-v2:0"
+    BEDROCK_MODEL_ID = "anthropic.claude-sonnet-4-6"
     
     @classmethod
     def validate(cls):

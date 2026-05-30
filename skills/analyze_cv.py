@@ -114,7 +114,7 @@ No incluyas texto adicional, solo el JSON."""
     
     try:
         response = bedrock.invoke_model(
-            modelId='anthropic.claude-3-5-sonnet-20241022-v2:0',
+            modelId='anthropic.claude-sonnet-4-6',
             body=body
         )
         
