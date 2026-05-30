@@ -5,6 +5,7 @@ Orquesta el flujo completo del análisis de CVs
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import time
 from typing import Optional
 import os
@@ -136,3 +137,9 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+
+# Mount static files (frontend) - must be last
+# This serves the frontend at the root path
+if os.path.exists("frontend"):
+    app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
