@@ -1,488 +1,381 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Analyzer - Kiro Demo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
-            width: 100%;
-            padding: 40px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 15px;
-            padding: 60px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
-        }
-
-        .upload-area:hover {
-            border-color: #764ba2;
-            background: #f8f9ff;
-        }
-
-        .upload-area.dragover {
-            border-color: #764ba2;
-            background: #f0f2ff;
-            transform: scale(1.02);
-        }
-
-        .upload-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-        }
-
-        .upload-text {
-            font-size: 1.2em;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .upload-hint {
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .file-info {
-            background: #f8f9ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .file-info.show {
-            display: block;
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .analyze-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: none;
-        }
-
-        .analyze-btn.show {
-            display: block;
-        }
-
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .analyze-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading.show {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .results {
-            display: none;
-            margin-top: 30px;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        .score-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .score-number {
-            font-size: 4em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .score-label {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .section {
-            background: #f8f9ff;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-
-        .section h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .section li {
-            padding: 10px 0;
-            border-bottom: 1px solid #e0e0e0;
-            color: #333;
-        }
-
-        .section li:last-child {
-            border-bottom: none;
-        }
-
-        .section li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .summary {
-            background: #fff9e6;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #ffc107;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .error {
-            background: #ffe6e6;
-            color: #d32f2f;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #d32f2f;
-            display: none;
-        }
-
-        .error.show {
-            display: block;
-        }
-
-        .new-analysis {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .new-analysis button {
-            padding: 12px 30px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .new-analysis button:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            color: #999;
-            font-size: 0.9em;
-        }
-
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-    </style>
+    <title>TalentScope AI - Professional CV Analysis Powered by AI</title>
+    <meta name="description" content="Analyze your CV with AI-powered insights. Get instant feedback on clarity, strengths, and areas for improvement.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🤖 CV Analyzer</h1>
-            <p>Análisis inteligente de CVs con IA</p>
-        </div>
-
-        <div class="upload-area" id="uploadArea">
-            <div class="upload-icon">📄</div>
-            <div class="upload-text">Arrastra tu CV aquí o haz clic para seleccionar</div>
-            <div class="upload-hint">Formatos: PDF o TXT (máx. 5MB)</div>
-            <input type="file" id="fileInput" accept=".pdf,.txt">
-        </div>
-
-        <div class="file-info" id="fileInfo">
-            <strong>Archivo seleccionado:</strong> <span class="file-name" id="fileName"></span>
-        </div>
-
-        <button class="analyze-btn" id="analyzeBtn">
-            Analizar CV con IA 🚀
-        </button>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Analizando tu CV con Claude Sonnet 4.6...</p>
-            <p style="color: #999; margin-top: 10px;">Esto puede tomar unos segundos</p>
-        </div>
-
-        <div class="error" id="error"></div>
-
-        <div class="results" id="results">
-            <div class="score-card">
-                <div class="score-label">Puntuación General</div>
-                <div class="score-number" id="score">-</div>
-                <div class="score-label">de 10</div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <img src="assets/logo.svg" alt="TalentScope AI" height="40">
+                </div>
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i data-feather="moon"></i>
+                    </button>
+                    <button class="btn btn-primary" onclick="scrollToAnalyzer()">Try it Free</button>
+                </div>
             </div>
+        </div>
+    </nav>
 
-            <div class="section">
-                <h3>✨ Puntos Fuertes</h3>
-                <ul id="strengths"></ul>
-            </div>
-
-            <div class="section">
-                <h3>💡 Áreas de Mejora</h3>
-                <ul id="improvements"></ul>
-            </div>
-
-            <div class="section">
-                <h3>📊 Claridad del Formato</h3>
-                <p style="font-size: 2em; text-align: center; color: #667eea; font-weight: bold;">
-                    <span id="clarityScore">-</span>/10
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i data-feather="zap"></i>
+                    <span>AI-Powered Analysis</span>
+                </div>
+                <h1 class="hero-title">
+                    Professional CV Analysis<br>
+                    <span class="gradient-text">Powered by AI</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Get instant, actionable feedback on your CV. Improve clarity, highlight strengths, 
+                    and stand out to recruiters with AI-driven insights.
                 </p>
-            </div>
-
-            <div class="summary">
-                <strong>📝 Resumen:</strong>
-                <p id="summary" style="margin-top: 10px;"></p>
-            </div>
-
-            <div class="new-analysis">
-                <button onclick="resetAnalysis()">Analizar otro CV</button>
+                <div class="hero-cta">
+                    <button class="btn btn-primary btn-lg" onclick="scrollToAnalyzer()">
+                        <span>Analyze Your CV Now</span>
+                        <i data-feather="arrow-right"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-lg" onclick="scrollToFeatures()">
+                        <span>Learn More</span>
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">CVs Analyzed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">2min</div>
+                        <div class="stat-label">Average Analysis</div>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="footer">
-            <p>Demo creado con <a href="https://kiro.ai" target="_blank">Kiro</a> por @Carli.Code</p>
-            <p>GDG Santa Cruz · Women Techmakers · UCB Bolivia</p>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose TalentScope AI?</h2>
+                <p class="section-subtitle">Powerful features to help you create the perfect CV</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="target"></i>
+                    </div>
+                    <h3 class="feature-title">Clarity Score</h3>
+                    <p class="feature-description">
+                        Get a precise clarity score that measures how well your CV communicates 
+                        your experience and skills to potential employers.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="check-circle"></i>
+                    </div>
+                    <h3 class="feature-title">Strength Analysis</h3>
+                    <p class="feature-description">
+                        Discover what makes your CV stand out. We highlight your strongest 
+                        points and help you emphasize them effectively.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="trending-up"></i>
+                    </div>
+                    <h3 class="feature-title">Smart Improvements</h3>
+                    <p class="feature-description">
+                        Receive actionable suggestions to enhance your CV. From structure 
+                        to content, we guide you to perfection.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="globe"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-Language</h3>
+                    <p class="feature-description">
+                        Analyze CVs in English or Spanish. Our AI understands context 
+                        and nuances in both languages.
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Three simple steps to a better CV</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i data-feather="upload"></i>
+                    </div>
+                    <h3 class="step-title">Upload Your CV</h3>
+                    <p class="step-description">
+                        Drag and drop your CV in PDF or TXT format. 
+                        We support files up to 10MB.
+                    </p>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i data-feather="cpu"></i>
+                    </div>
+                    <h3 class="step-title">AI Analysis</h3>
+                    <p class="step-description">
+                        Our AI analyzes your CV in seconds, evaluating 
+                        clarity, structure, and content quality.
+                    </p>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i data-feather="bar-chart-2"></i>
+                    </div>
+                    <h3 class="step-title">Get Insights</h3>
+                    <p class="step-description">
+                        Receive detailed feedback with scores, strengths, 
+                        and actionable improvement suggestions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analyzer Section -->
+    <section class="analyzer" id="analyzer">
+        <div class="container">
+            <div class="analyzer-card">
+                <!-- Upload View -->
+                <div class="upload-view" id="uploadView">
+                    <div class="analyzer-header">
+                        <h2 class="analyzer-title">Analyze Your CV</h2>
+                        <p class="analyzer-subtitle">Upload your CV and select your preferred language</p>
+                    </div>
+                    
+                    <div class="language-selector">
+                        <label class="language-option">
+                            <input type="radio" name="language" value="en" checked>
+                            <span class="language-label">
+                                <i data-feather="globe"></i>
+                                English
+                            </span>
+                        </label>
+                        <label class="language-option">
+                            <input type="radio" name="language" value="es">
+                            <span class="language-label">
+                                <i data-feather="globe"></i>
+                                Spanish
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="dropzone" id="dropzone">
+                        <input type="file" id="fileInput" accept=".pdf,.txt" hidden>
+                        <div class="dropzone-content">
+                            <div class="dropzone-icon">
+                                <i data-feather="upload-cloud"></i>
+                            </div>
+                            <h3 class="dropzone-title">Drop your CV here</h3>
+                            <p class="dropzone-subtitle">or click to browse</p>
+                            <div class="dropzone-formats">PDF or TXT • Max 10MB</div>
+                        </div>
+                    </div>
+
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <div class="file-details">
+                            <i data-feather="file-text"></i>
+                            <div class="file-name" id="fileName"></div>
+                            <div class="file-size" id="fileSize"></div>
+                        </div>
+                        <button class="btn-icon" id="removeFile" aria-label="Remove file">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg btn-full" id="analyzeBtn" disabled>
+                        <span>Analyze CV</span>
+                        <i data-feather="arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Loading View -->
+                <div class="loading-view" id="loadingView" style="display: none;">
+                    <div class="loading-animation">
+                        <div class="spinner"></div>
+                    </div>
+                    <h3 class="loading-title">Analyzing Your CV...</h3>
+                    <p class="loading-subtitle">Our AI is reviewing your document</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- Results View -->
+                <div class="results-view" id="resultsView" style="display: none;">
+                    <div class="results-header">
+                        <h2 class="results-title">Analysis Complete</h2>
+                        <button class="btn btn-secondary" id="analyzeAnother">
+                            <i data-feather="refresh-cw"></i>
+                            <span>Analyze Another</span>
+                        </button>
+                    </div>
+
+                    <!-- Score Section -->
+                    <div class="score-section">
+                        <div class="score-card main-score">
+                            <div class="score-label">Overall Score</div>
+                            <div class="score-circle">
+                                <svg class="score-svg" viewBox="0 0 120 120">
+                                    <circle class="score-bg" cx="60" cy="60" r="54"></circle>
+                                    <circle class="score-progress" cx="60" cy="60" r="54" id="scoreCircle"></circle>
+                                </svg>
+                                <div class="score-value" id="overallScore">0</div>
+                            </div>
+                        </div>
+                        <div class="score-card">
+                            <div class="score-label">Clarity Score</div>
+                            <div class="score-number" id="clarityScore">0</div>
+                            <div class="score-bar">
+                                <div class="score-bar-fill" id="clarityBar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Section -->
+                    <div class="summary-section">
+                        <div class="summary-icon">
+                            <i data-feather="file-text"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3 class="summary-title">Summary</h3>
+                            <p class="summary-text" id="summaryText"></p>
+                        </div>
+                    </div>
+
+                    <!-- Strengths Section -->
+                    <div class="insights-section">
+                        <h3 class="insights-title">
+                            <i data-feather="check-circle"></i>
+                            Strengths
+                        </h3>
+                        <div class="insights-grid" id="strengthsGrid"></div>
+                    </div>
+
+                    <!-- Improvements Section -->
+                    <div class="insights-section">
+                        <h3 class="insights-title">
+                            <i data-feather="alert-circle"></i>
+                            Areas for Improvement
+                        </h3>
+                        <div class="insights-grid" id="improvementsGrid"></div>
+                    </div>
+                </div>
+
+                <!-- Error View -->
+                <div class="error-view" id="errorView" style="display: none;">
+                    <div class="error-icon">
+                        <i data-feather="alert-triangle"></i>
+                    </div>
+                    <h3 class="error-title">Analysis Failed</h3>
+                    <p class="error-message" id="errorMessage"></p>
+                    <button class="btn btn-primary" id="tryAgain">
+                        <i data-feather="refresh-cw"></i>
+                        <span>Try Again</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/logo.svg" alt="TalentScope AI" height="36">
+                    <p class="footer-tagline">Professional CV Analysis Powered by AI</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i data-feather="twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <i data-feather="linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <i data-feather="github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Product</h4>
+                        <a href="#features" class="footer-link">Features</a>
+                        <a href="#analyzer" class="footer-link">Try it Free</a>
+                        <a href="#" class="footer-link">Pricing</a>
+                        <a href="#" class="footer-link">API</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Company</h4>
+                        <a href="#" class="footer-link">About</a>
+                        <a href="#" class="footer-link">Blog</a>
+                        <a href="#" class="footer-link">Careers</a>
+                        <a href="#" class="footer-link">Contact</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4 class="footer-heading">Legal</h4>
+                        <a href="#" class="footer-link">Privacy</a>
+                        <a href="#" class="footer-link">Terms</a>
+                        <a href="#" class="footer-link">Security</a>
+                        <a href="#" class="footer-link">Cookies</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TalentScope AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
     <script>
-        const API_URL = 'https://m6gt2xyrg0.execute-api.us-east-1.amazonaws.com/Prod';
-        
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const loading = document.getElementById('loading');
-        const error = document.getElementById('error');
-        const results = document.getElementById('results');
-
-        let selectedFile = null;
-
-        // Click to upload
-        uploadArea.addEventListener('click', () => fileInput.click());
-
-        // File selection
-        fileInput.addEventListener('change', (e) => {
-            handleFile(e.target.files[0]);
-        });
-
-        // Drag and drop
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            handleFile(e.dataTransfer.files[0]);
-        });
-
-        function handleFile(file) {
-            if (!file) return;
-
-            // Validate file type
-            const validTypes = ['application/pdf', 'text/plain'];
-            if (!validTypes.includes(file.type)) {
-                showError('Por favor selecciona un archivo PDF o TXT');
-                return;
-            }
-
-            // Validate file size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                showError('El archivo es muy grande. Máximo 5MB');
-                return;
-            }
-
-            selectedFile = file;
-            fileName.textContent = file.name;
-            fileInfo.classList.add('show');
-            analyzeBtn.classList.add('show');
-            error.classList.remove('show');
-        }
-
-        analyzeBtn.addEventListener('click', analyzeCV);
-
-        async function analyzeCV() {
-            if (!selectedFile) return;
-
-            // Hide previous results
-            results.classList.remove('show');
-            error.classList.remove('show');
-            analyzeBtn.disabled = true;
-            loading.classList.add('show');
-
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            formData.append('language', 'es');
-
-            try {
-                const response = await fetch(`${API_URL}/analyze`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error al analizar el CV');
-                }
-
-                displayResults(data.data);
-            } catch (err) {
-                showError(err.message || 'Error al conectar con el servidor');
-            } finally {
-                loading.classList.remove('show');
-                analyzeBtn.disabled = false;
-            }
-        }
-
-        function displayResults(data) {
-            document.getElementById('score').textContent = data.score || '-';
-            document.getElementById('clarityScore').textContent = data.clarity_score || '-';
-            document.getElementById('summary').textContent = data.summary || 'No disponible';
-
-            const strengthsList = document.getElementById('strengths');
-            strengthsList.innerHTML = '';
-            (data.strengths || []).forEach(strength => {
-                const li = document.createElement('li');
-                li.textContent = strength;
-                strengthsList.appendChild(li);
-            });
-
-            const improvementsList = document.getElementById('improvements');
-            improvementsList.innerHTML = '';
-            (data.improvements || []).forEach(improvement => {
-                const li = document.createElement('li');
-                li.textContent = improvement;
-                improvementsList.appendChild(li);
-            });
-
-            results.classList.add('show');
-        }
-
-        function showError(message) {
-            error.textContent = '❌ ' + message;
-            error.classList.add('show');
-        }
-
-        function resetAnalysis() {
-            selectedFile = null;
-            fileInput.value = '';
-            fileInfo.classList.remove('show');
-            analyzeBtn.classList.remove('show');
-            results.classList.remove('show');
-            error.classList.remove('show');
-        }
+        feather.replace();
     </script>
 </body>
 </html>
