@@ -3,9 +3,10 @@
 // ===================================
 
 // Configuration
-const API_ENDPOINT = window.location.hostname === 'localhost' 
+// DEPLOY_API_URL is replaced by deploy-aws.sh with the real API Gateway URL
+const API_ENDPOINT = window.location.hostname === 'localhost'
     ? 'http://localhost:8000/analyze'
-    : '/analyze';
+    : 'DEPLOY_API_URL/analyze';
 
 // State Management
 const state = {
@@ -67,35 +68,49 @@ function init() {
 // ===================================
 function setupEventListeners() {
     // Dropzone events
-    elements.dropzone.addEventListener('click', () => elements.fileInput.click());
-    elements.dropzone.addEventListener('dragover', handleDragOver);
-    elements.dropzone.addEventListener('dragleave', handleDragLeave);
-    elements.dropzone.addEventListener('drop', handleDrop);
-    
+    if (elements.dropzone && elements.fileInput) {
+        elements.dropzone.addEventListener('click', () => elements.fileInput.click());
+        elements.dropzone.addEventListener('dragover', handleDragOver);
+        elements.dropzone.addEventListener('dragleave', handleDragLeave);
+        elements.dropzone.addEventListener('drop', handleDrop);
+    }
+
     // File input
-    elements.fileInput.addEventListener('change', handleFileSelect);
-    
+    if (elements.fileInput) {
+        elements.fileInput.addEventListener('change', handleFileSelect);
+    }
+
     // Remove file
-    elements.removeFile.addEventListener('click', clearFile);
-    
+    if (elements.removeFile) {
+        elements.removeFile.addEventListener('click', clearFile);
+    }
+
     // Language selection
     document.querySelectorAll('input[name="language"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             state.selectedLanguage = e.target.value;
         });
     });
-    
+
     // Analyze button
-    elements.analyzeBtn.addEventListener('click', analyzeCV);
-    
+    if (elements.analyzeBtn) {
+        elements.analyzeBtn.addEventListener('click', analyzeCV);
+    }
+
     // Analyze another
-    elements.analyzeAnother.addEventListener('click', resetToUpload);
-    
+    if (elements.analyzeAnother) {
+        elements.analyzeAnother.addEventListener('click', resetToUpload);
+    }
+
     // Try again
-    elements.tryAgain.addEventListener('click', resetToUpload);
-    
+    if (elements.tryAgain) {
+        elements.tryAgain.addEventListener('click', resetToUpload);
+    }
+
     // Theme toggle
-    elements.themeToggle.addEventListener('click', toggleTheme);
+    if (elements.themeToggle) {
+        elements.themeToggle.addEventListener('click', toggleTheme);
+    }
 }
 
 // ===================================
@@ -110,16 +125,19 @@ function setupTheme() {
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
+
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateThemeIcon(newTheme);
 }
 
 function updateThemeIcon(theme) {
+    if (!elements.themeToggle) return;
     const icon = elements.themeToggle.querySelector('i');
-    icon.setAttribute('data-feather', theme === 'light' ? 'moon' : 'sun');
-    feather.replace();
+    if (icon) {
+        icon.setAttribute('data-feather', theme === 'light' ? 'moon' : 'sun');
+        feather.replace();
+    }
 }
 
 // ===================================
@@ -250,7 +268,11 @@ async function analyzeCV() {
         
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.detail || `Server error: ${response.status}`);
+            const detail = errorData.detail;
+            const message = typeof detail === 'string'
+                ? detail
+                : (detail?.error || detail?.message || `Server error: ${response.status}`);
+            throw new Error(message);
         }
         
         const result = await response.json();

@@ -90,16 +90,14 @@ def analyze_with_bedrock(cv_text: str, language: str = "es") -> Dict:
 CV:
 {cv_text}
 
-IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta:
+IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido, sin bloques de código markdown, sin texto adicional antes o después. Usa exactamente esta estructura:
 {{
   "puntos_fuertes": ["punto 1", "punto 2", "punto 3"],
   "areas_mejora": ["mejora 1", "mejora 2", "mejora 3"],
   "claridad_formato": 8,
   "puntuacion_general": 7,
   "resumen": "Breve resumen del CV en 2-3 líneas"
-}}
-
-No incluyas texto adicional, solo el JSON."""
+}}"""
     
     body = json.dumps({
         "anthropic_version": "bedrock-2023-05-31",
@@ -114,16 +112,22 @@ No incluyas texto adicional, solo el JSON."""
     
     try:
         response = bedrock.invoke_model(
-            modelId='anthropic.claude-sonnet-4-6',
+            modelId='us.anthropic.claude-haiku-4-5-20251001-v1:0',
             body=body
         )
         
         response_body = json.loads(response['body'].read())
         ai_response = response_body['content'][0]['text']
         
+        # Strip markdown code fences if model wraps JSON in ```json ... ```
+        clean_response = ai_response.strip()
+        if clean_response.startswith("```"):
+            clean_response = re.sub(r'^```(?:json)?\s*', '', clean_response)
+            clean_response = re.sub(r'\s*```$', '', clean_response)
+        
         # Parsear JSON de la respuesta
         try:
-            feedback_data = json.loads(ai_response)
+            feedback_data = json.loads(clean_response)
             return {
                 "feedback": feedback_data,
                 "score": feedback_data.get("puntuacion_general", 5),

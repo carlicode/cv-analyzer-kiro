@@ -4,14 +4,23 @@ Description: CV Analyzer API - Serverless Application
 
 Globals:
   Function:
-    Timeout: 30
+    Timeout: 60
     MemorySize: 512
-    Runtime: python3.11
+    Runtime: python3.12
     Environment:
       Variables:
         MAX_FILE_SIZE_MB: 5
         ALLOWED_EXTENSIONS: pdf,txt
         DEFAULT_LANGUAGE: es
+  Api:
+    BinaryMediaTypes:
+      - multipart/form-data
+      - application/octet-stream
+      - application/pdf
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
 
 Resources:
   CVAnalyzerFunction:
@@ -28,9 +37,9 @@ Resources:
           - Effect: Allow
             Action:
               - bedrock:InvokeModel
-            Resource: 
-              - !Sub 'arn:aws:bedrock:${AWS::Region}::foundation-model/anthropic.claude-sonnet-4-6'
-              - !Sub 'arn:aws:bedrock:${AWS::Region}::foundation-model/anthropic.claude-*'
+            Resource:
+              - 'arn:aws:bedrock:*::foundation-model/anthropic.claude-*'
+              - !Sub 'arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/*'
       Events:
         RootPath:
           Type: Api

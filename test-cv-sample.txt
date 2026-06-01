@@ -1,0 +1,72 @@
+JOHN DOE
+Software Engineer | Full Stack Developer
+Email: john.doe@email.com | Phone: +1 (555) 123-4567
+LinkedIn: linkedin.com/in/johndoe | GitHub: github.com/johndoe
+
+PROFESSIONAL SUMMARY
+Experienced Full Stack Software Engineer with 5+ years of expertise in building scalable web applications. 
+Proficient in Python, JavaScript, React, and cloud technologies. Proven track record of leading development 
+teams and delivering high-quality software solutions that improve business efficiency by 40%.
+
+WORK EXPERIENCE
+
+Senior Software Engineer | Tech Innovations Inc.
+San Francisco, CA | January 2021 - Present
+• Led a team of 5 developers in building a microservices-based e-commerce platform using Python, FastAPI, and React
+• Implemented CI/CD pipelines that reduced deployment time by 60%
+• Architected and deployed cloud infrastructure on AWS, handling 1M+ daily active users
+• Mentored junior developers and conducted code reviews to maintain high code quality standards
+• Improved application performance by 45% through database optimization and caching strategies
+
+Software Engineer | Digital Solutions Corp.
+New York, NY | June 2019 - December 2020
+• Developed RESTful APIs using Python Django and PostgreSQL for a SaaS platform
+• Built responsive front-end interfaces with React and TypeScript
+• Collaborated with product managers and designers in Agile sprints
+• Reduced bug reports by 35% through comprehensive unit and integration testing
+• Implemented authentication and authorization systems using OAuth 2.0 and JWT
+
+Junior Developer | StartUp Ventures
+Boston, MA | August 2018 - May 2019
+• Contributed to full-stack development of web applications using JavaScript and Node.js
+• Participated in daily stand-ups and sprint planning meetings
+• Fixed bugs and implemented new features based on user feedback
+• Learned best practices in software development and version control with Git
+
+TECHNICAL SKILLS
+
+Programming Languages: Python, JavaScript, TypeScript, SQL, HTML, CSS
+Frameworks & Libraries: FastAPI, Django, React, Node.js, Express, Redux
+Databases: PostgreSQL, MongoDB, Redis, MySQL
+Cloud & DevOps: AWS (EC2, S3, Lambda, RDS), Docker, Kubernetes, CI/CD, GitHub Actions
+Tools: Git, VS Code, Postman, Jira, Figma
+
+EDUCATION
+
+Bachelor of Science in Computer Science
+Massachusetts Institute of Technology (MIT)
+Cambridge, MA | Graduated: May 2018
+GPA: 3.8/4.0
+
+CERTIFICATIONS
+• AWS Certified Solutions Architect - Associate (2022)
+• Professional Scrum Master I (PSM I) (2021)
+
+PROJECTS
+
+E-Commerce Platform (2021-2023)
+• Built a full-featured e-commerce platform with payment integration, inventory management, and analytics
+• Technologies: Python, FastAPI, React, PostgreSQL, AWS, Stripe API
+• Result: Platform now serves 50,000+ active users with 99.9% uptime
+
+AI-Powered Task Manager (2020)
+• Developed a task management application with AI-based priority suggestions
+• Technologies: Python, TensorFlow, React, MongoDB
+• Result: Improved user productivity by 30% based on user surveys
+
+LANGUAGES
+• English (Native)
+• Spanish (Professional Working Proficiency)
+
+INTERESTS
+Open source contribution, Machine Learning, Cloud Architecture, Tech Blogging

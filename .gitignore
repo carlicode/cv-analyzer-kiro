@@ -11,6 +11,10 @@ venv/
 .aws-sam/
 samconfig.toml.bak
 
+# Deploy artifacts
+.frontend-bucket-name
+frontend/app.js.backup
+
 # Railway
 .railway/
 

@@ -1,4 +1,4 @@
-.PHONY: help install install-dev run test lint format clean docker-build docker-run deploy-railway deploy-aws sam-build sam-deploy
+.PHONY: help install install-dev run test lint format clean docker-build docker-run deploy-railway deploy-aws deploy-aws-full sam-build sam-deploy aws-logs aws-status aws-cleanup
 
 help:
 	@echo "Comandos disponibles:"
@@ -13,10 +13,16 @@ help:
 	@echo "  make docker-run    - Ejecutar con Docker Compose"
 	@echo ""
 	@echo "Deployment:"
-	@echo "  make deploy-railway - Desplegar a Railway"
-	@echo "  make deploy-aws     - Desplegar a AWS Lambda"
-	@echo "  make sam-build      - Build con AWS SAM"
-	@echo "  make sam-deploy     - Deploy con AWS SAM"
+	@echo "  make deploy-railway    - Desplegar a Railway"
+	@echo "  make deploy-aws-full   - Deploy completo a AWS (Lambda + S3)"
+	@echo "  make deploy-aws        - Deploy solo Lambda (manual)"
+	@echo "  make sam-build         - Build con AWS SAM"
+	@echo "  make sam-deploy        - Deploy con AWS SAM"
+	@echo ""
+	@echo "AWS Management:"
+	@echo "  make aws-logs          - Ver logs de Lambda"
+	@echo "  make aws-status        - Ver estado del stack"
+	@echo "  make aws-cleanup       - Eliminar recursos de AWS"
 
 install:
 	pip install -r requirements.txt
@@ -62,16 +68,37 @@ docker-stop:
 # Deployment commands
 deploy-railway:
 	@echo "🚀 Desplegando a Railway..."
-	./deploy/deploy_railway.sh
+	./deploy-railway.sh
+
+deploy-aws-full:
+	@echo "🚀 Desplegando a AWS (Lambda + S3)..."
+	./deploy-aws.sh
 
 deploy-aws:
-	@echo "🚀 Desplegando a AWS Lambda..."
-	./deploy/deploy_aws.sh
+	@echo "🚀 Desplegando solo Lambda..."
+	@make sam-build
+	@make sam-deploy
 
 sam-build:
 	@echo "📦 Building con AWS SAM..."
-	sam build --use-container
+	sam build
 
 sam-deploy:
 	@echo "🚀 Deploying con AWS SAM..."
 	sam deploy
+
+# AWS Management commands
+aws-logs:
+	@echo "📋 Mostrando logs de Lambda..."
+	sam logs -n CVAnalyzerFunction --tail
+
+aws-status:
+	@echo "📊 Estado del stack..."
+	@aws cloudformation describe-stacks \
+		--stack-name cv-analyzer-stack \
+		--query 'Stacks[0].{Status:StackStatus,Outputs:Outputs}' \
+		--output table
+
+aws-cleanup:
+	@echo "🗑️  Eliminando recursos de AWS..."
+	./cleanup-aws.sh
